@@ -7,9 +7,44 @@ import Information from './../Information/Information';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
+
+//https://alligator.io/react/axios-react/
+
 const cellEditProp = {
+    //https://react-bootstrap-table.github.io/react-bootstrap-table2/docs/cell-edit-props.html#celleditonstartedit-function
     mode: 'dbclick',
-    blurToSave: true
+    blurToSave: true,
+    beforeSaveCell: (oldValue, newValue, row, column) => { 
+
+        const rule = {
+            name: oldValue["name"],
+            word: oldValue["key"],
+            predicament: oldValue["predicament"],
+            certainty: oldValue["certainty"]
+        }
+        console.log(rule);
+        axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
+        .then(res => {
+        //   console.log(res);
+        //   console.log(res.data);
+        })
+    },
+    afterSaveCell: (oldValue, newValue, row, column) => { 
+        const rule = {
+            name: oldValue["name"],
+            word: oldValue["key"],
+            predicament: oldValue["predicament"],
+            certainty: oldValue["certainty"]
+        }
+
+        rule[newValue] = row;
+
+        axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
+        .then(res => {
+        //   console.log(res);
+        //   console.log(res.data);
+        })
+    }
 };
 
 
@@ -59,8 +94,8 @@ class Layout extends Component {
 
         axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
         .then(res => {
-          console.log(res);
-          console.log(res.data);
+        //   console.log(res);
+        //   console.log(res.data);
         })
     }
 
@@ -79,19 +114,19 @@ class Layout extends Component {
             <br/><br/><br/>
             <BootstrapTable 
                 data={ this.state.rules }
-                id = { this.state.idx }
                 insertRow={ true }
                 options={ options }
+                cellEdit={ cellEditProp }
                 pagination
                 striped
                 hover
                 condensed >
 
                 {/* <TableHeaderColumn dataField="id" dataAlign="center" editable={ false }>Id</TableHeaderColumn> */}
-                <TableHeaderColumn dataField="name" dataAlign="center" dataSort cellEdit={ cellEditProp }>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="key" isKey dataAlign="center" cellEdit={ cellEditProp }>Word</TableHeaderColumn>
-                <TableHeaderColumn dataField="predicament" dataAlign="center" cellEdit={ cellEditProp }>Predicament</TableHeaderColumn>
-                <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort cellEdit={ cellEditProp }>Certainty</TableHeaderColumn>
+                <TableHeaderColumn dataField="name" dataAlign="center" dataSort>Name</TableHeaderColumn>
+                <TableHeaderColumn dataField="key" isKey dataAlign="center" dataSort>Word</TableHeaderColumn>
+                <TableHeaderColumn dataField="predicament" dataAlign="center" dataSort>Predicament</TableHeaderColumn>
+                <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort>Certainty</TableHeaderColumn>
             </BootstrapTable>
 
         </div>
