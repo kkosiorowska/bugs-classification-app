@@ -4,8 +4,15 @@ import React, { Component } from 'react';
 import './Layout.css';
 import axios from 'axios';
 import Information from './../Information/Information';
+import { Button } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
+
+
+function buttonFormatter(cell, row){
+    return '<BootstrapButton type="submit"></BootstrapButton>';
+  }
 
 
 //https://alligator.io/react/axios-react/
@@ -93,6 +100,28 @@ class Layout extends Component {
         })
     }
 
+    onClickRowSelected(cell, row, rowIndex){
+        console.log(row);
+
+        const rule = {
+            name: row["employee"],
+            word: row["key"],
+            predicament: row["predicament"],
+            certainty: row["certainty"]
+        }
+        axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
+        .then(res => {
+        })
+
+        window.location.reload();
+    }
+
+    cellButton(cell, row, enumObject, rowIndex) {
+        return (
+            <Button variant="danger" onClick={() => this.onClickRowSelected(cell, row, rowIndex)}>Delete</Button>
+        )
+     }
+
     render (){
 
         const options = {
@@ -118,6 +147,7 @@ class Layout extends Component {
                 <TableHeaderColumn dataField="employee" dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Employee</TableHeaderColumn>
                 <TableHeaderColumn dataField="key"  isKey dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Word</TableHeaderColumn>
                 <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>','<', '<=', '>=' ] } }>Certainty</TableHeaderColumn>
+                <TableHeaderColumn dataField='button' dataAlign="center" editable={ false } width={'10%'} dataFormat={this.cellButton.bind(this)}/>
             </BootstrapTable>
 
         </div>
