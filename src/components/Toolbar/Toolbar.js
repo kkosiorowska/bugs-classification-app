@@ -13,10 +13,6 @@ const toolbar = (props) => (
           <Nav.Link href="#ruleMenagment" active>Rule menagment</Nav.Link>
           {/* <Nav.Link href="#logs">Logs</Nav.Link> */}
         </Nav>
-        <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="outline-info">Search</Button>
-        </Form>
       </Navbar>
     </div>
 );
