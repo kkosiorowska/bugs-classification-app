@@ -17,7 +17,7 @@ const cellEditProp = {
     beforeSaveCell: (oldValue, newValue, row, column) => { 
 
         const rule = {
-            name: oldValue["name"],
+            name: oldValue["employee"],
             word: oldValue["key"],
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
@@ -25,24 +25,23 @@ const cellEditProp = {
         console.log(rule);
         axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
         .then(res => {
-        //   console.log(res);
-        //   console.log(res.data);
         })
     },
     afterSaveCell: (oldValue, newValue, row, column) => { 
         const rule = {
-            name: oldValue["name"],
+            name: oldValue["employee"],
             word: oldValue["key"],
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
         }
 
-        rule[newValue] = row;
+        if(newValue == "employee") rule["name"] = row;
+        if(newValue == "word") rule["key"] = row;
+
+    
 
         axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
         .then(res => {
-        //   console.log(res);
-        //   console.log(res.data);
         })
     }
 };
@@ -70,8 +69,8 @@ class Layout extends Component {
         axios.get(`http://localhost:8080/RestExample/resources/clips/rules`)
         .then(res => {
             const results= res.data.map(row => ({
-                // id: this.state.idx++, 
-                name: row.name,
+                key: this.state.idx++, 
+                employee: row.name,
                 key: row.word,
                 predicament: row.predicament,
                 certainty: row.certainty
@@ -86,16 +85,14 @@ class Layout extends Component {
         //row["id"] = this.state.idx++;
     
         const rule = {
-            name: row["name"],
-            word: row["key"],
-            predicament: row["predicament"],
+            employee: row["employee"],
+            key: row["key"],
+            predicament: "",
             certainty: row["certainty"]
         }
 
         axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
         .then(res => {
-        //   console.log(res);
-        //   console.log(res.data);
         })
     }
 
@@ -110,7 +107,6 @@ class Layout extends Component {
         <div className="Layout">
 
             <Information/>
-            
             <br/><br/><br/>
             <BootstrapTable 
                 data={ this.state.rules }
@@ -121,12 +117,10 @@ class Layout extends Component {
                 striped
                 hover
                 condensed >
-
-                {/* <TableHeaderColumn dataField="id" dataAlign="center" editable={ false }>Id</TableHeaderColumn> */}
-                <TableHeaderColumn dataField="name" dataAlign="center" dataSort>Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="key" isKey dataAlign="center" dataSort>Word</TableHeaderColumn>
-                <TableHeaderColumn dataField="predicament" dataAlign="center" dataSort>Predicament</TableHeaderColumn>
-                <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort>Certainty</TableHeaderColumn>
+                {/* <TableHeaderColumn dataField="key" isKey dataAlign="center" dataSort editable={ false }>Id</TableHeaderColumn> */}
+                <TableHeaderColumn dataField="employee" dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Employee</TableHeaderColumn>
+                <TableHeaderColumn dataField="key"  isKey dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Word</TableHeaderColumn>
+                <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>','<', '<=', '>=' ] } }>Certainty</TableHeaderColumn>
             </BootstrapTable>
 
         </div>
