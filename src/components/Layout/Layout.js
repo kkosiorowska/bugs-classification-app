@@ -22,7 +22,6 @@ const cellEditProp = {
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
         }
-        console.log(rule);
         axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
         .then(res => {
         })
@@ -35,10 +34,8 @@ const cellEditProp = {
             certainty: oldValue["certainty"]
         }
 
-        if(newValue == "employee") rule["name"] = row;
-        if(newValue == "word") rule["key"] = row;
-
-    
+        if(newValue === "employee") rule["name"] = row;
+        if(newValue === "word") rule["key"] = row;
 
         axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
         .then(res => {
@@ -85,9 +82,9 @@ class Layout extends Component {
         //row["id"] = this.state.idx++;
     
         const rule = {
-            employee: row["employee"],
-            key: row["key"],
-            predicament: "",
+            name: row["employee"],
+            word: row["key"],
+            predicament: "default",
             certainty: row["certainty"]
         }
 
@@ -110,7 +107,7 @@ class Layout extends Component {
             <br/><br/><br/>
             <BootstrapTable 
                 data={ this.state.rules }
-                insertRow={ true }
+                insertRow = {true}
                 options={ options }
                 cellEdit={ cellEditProp }
                 pagination

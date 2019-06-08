@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Toolbar.css';
 import logo from './../../images/bug.png';
-import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
 const toolbar = (props) => (
     <div className="Toolbar">
