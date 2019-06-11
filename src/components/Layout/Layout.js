@@ -70,8 +70,9 @@ class Layout extends Component {
     }
 
     getData(){
-        axios.get(`http://localhost:8080/RestExample/resources/clips/rules`)
+        axios.get(`http://156.17.41.242:8085/RestApi/resources/clips/rules`)
         .then(res => {
+            console.log(res);
             const results= res.data.map(row => ({
                 key: this.state.idx++, 
                 employee: row.name,

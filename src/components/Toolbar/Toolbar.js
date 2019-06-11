@@ -9,7 +9,7 @@ const toolbar = (props) => (
       <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="#ruleMenagment"><img src={logo} alt="logo"/></Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="http://localhost:2990/jira/secure/Dashboard.jspa">Back to Jira</Nav.Link>
+          <Nav.Link href="http://156.17.41.242:8080/secure/Dashboard.jspa">Back to Jira</Nav.Link>
           <Nav.Link href="#ruleMenagment" active>Rule menagment</Nav.Link>
           {/* <Nav.Link href="#logs">Logs</Nav.Link> */}
         </Nav>
