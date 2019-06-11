@@ -96,7 +96,7 @@ class Layout extends Component {
             certainty: row["certainty"]
         }
 
-        axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
+        axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
         })
     }
@@ -110,7 +110,7 @@ class Layout extends Component {
             predicament: row["predicament"],
             certainty: row["certainty"]
         }
-        axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
+        axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/delete`, rule)
         .then(res => {
         })
 
