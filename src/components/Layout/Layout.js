@@ -9,12 +9,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 
-
-function buttonFormatter(cell, row){
-    return '<BootstrapButton type="submit"></BootstrapButton>';
-  }
-
-
 //https://alligator.io/react/axios-react/
 
 const cellEditProp = {
@@ -72,14 +66,17 @@ class Layout extends Component {
     getData(){
         axios.get(`http://156.17.41.242:8085/RestApi/resources/clips/rules`)
         .then(res => {
-            const results= res.data.rule.map(row => ({
-                key: this.state.idx++, 
-                employee: row.name,
-                key: row.word,
-                predicament: row.predicament,
-                certainty: row.certainty
-              }))
-          this.setState({ rules: results });
+
+            if(res.data != null){
+                const results= res.data.rule.map(row => ({
+                    //key: this.state.idx++, 
+                    employee: row.name,
+                    key: row.word,
+                    predicament: row.predicament,
+                    certainty: row.certainty
+                  }))
+              this.setState({ rules: results });
+            }
             
         })
     }
@@ -95,11 +92,8 @@ class Layout extends Component {
             certainty: row["certainty"]
         }
 
-        console.log(rule);
-
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
-            console.log(res);
         })
     }
 
