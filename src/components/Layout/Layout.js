@@ -17,11 +17,12 @@ const cellEditProp = {
     beforeSaveCell: (oldValue, newValue, row, column) => { 
 
         const rule = {
+            certainty: oldValue["certainty"],
             name: oldValue["employee"],
             word: oldValue["word"],
             predicament: oldValue["predicament"],
-            certainty: oldValue["certainty"]
         }
+
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/delete`, rule)
         .then(res => {
         })
@@ -35,7 +36,6 @@ const cellEditProp = {
         }
 
         if(newValue === "employee") rule["name"] = row;
-        //if(newValue === "word") rule["key"] = row;
 
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
@@ -60,7 +60,7 @@ class Layout extends Component {
 
         this.getData();
     }
-    // wyswietlanie
+    // Wyswietlanie
     getData(){
         axios.get(`http://156.17.41.242:8085/RestApi/resources/clips/rules`)
         .then(res => {
@@ -78,30 +78,27 @@ class Layout extends Component {
             
         })
     }
-    // dodawanie
+    // Dodawanie
     onAddRow(row) {
 
-        //if(row["employee"]!=="" && row["word"]!=="" && row["certainty"]!==""){
+        if(row["employee"]!=="" && row["word"]!=="" && row["certainty"]!==""){
             const rule = {
                 name: row["employee"],
                 word: row["word"],
                 predicament: "default",
                 certainty: row["certainty"]
             }
-    
             console.log(rule);
-    
             axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
             .then(res => {
             })
     
-           //window.location.reload();
-        //}
+           window.location.reload();
+        }
       }
 
-    // usuwanie 
+    // Usuwanie 
     onClickRowSelected(cell, row, rowIndex){
-        console.log(row);
 
         const rule = {
             certainty: row["certainty"],
@@ -113,10 +110,9 @@ class Layout extends Component {
         console.log(rule);
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/delete`, rule)
         .then(res => {
-            console.log(res);
         })
 
-      // window.location.reload();
+      window.location.reload();
     }
 
     cellButton(cell, row, enumObject, rowIndex) {
