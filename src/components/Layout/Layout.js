@@ -29,7 +29,7 @@ const cellEditProp = {
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
         }
-        axios.post(`http://localhost:8080/RestExample/resources/clips/delete`, rule)
+        axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/delete`, rule)
         .then(res => {
         })
     },
@@ -44,7 +44,7 @@ const cellEditProp = {
         if(newValue === "employee") rule["name"] = row;
         if(newValue === "word") rule["key"] = row;
 
-        axios.post(`http://localhost:8080/RestExample/resources/clips/post`, rule)
+        axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
         })
     }
@@ -72,8 +72,7 @@ class Layout extends Component {
     getData(){
         axios.get(`http://156.17.41.242:8085/RestApi/resources/clips/rules`)
         .then(res => {
-            console.log(res);
-            const results= res.data.map(row => ({
+            const results= res.data.rule.map(row => ({
                 key: this.state.idx++, 
                 employee: row.name,
                 key: row.word,
@@ -96,8 +95,11 @@ class Layout extends Component {
             certainty: row["certainty"]
         }
 
+        console.log(rule);
+
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
+            console.log(res);
         })
     }
 
@@ -137,7 +139,7 @@ class Layout extends Component {
             <br/><br/><br/>
             <BootstrapTable 
                 data={ this.state.rules }
-                insertRow = {true}
+                insertRow = { true }
                 options={ options }
                 cellEdit={ cellEditProp }
                 pagination
