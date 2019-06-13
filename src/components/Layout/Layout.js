@@ -8,7 +8,6 @@ import { Button } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-
 //https://alligator.io/react/axios-react/
 
 const cellEditProp = {
@@ -19,7 +18,7 @@ const cellEditProp = {
 
         const rule = {
             name: oldValue["employee"],
-            word: oldValue["key"],
+            word: oldValue["word"],
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
         }
@@ -30,20 +29,19 @@ const cellEditProp = {
     afterSaveCell: (oldValue, newValue, row, column) => { 
         const rule = {
             name: oldValue["employee"],
-            word: oldValue["key"],
+            word: oldValue["word"],
             predicament: oldValue["predicament"],
             certainty: oldValue["certainty"]
         }
 
         if(newValue === "employee") rule["name"] = row;
-        if(newValue === "word") rule["key"] = row;
+        //if(newValue === "word") rule["key"] = row;
 
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
         .then(res => {
         })
     }
 };
-
 
 class Layout extends Component {
 
@@ -62,16 +60,16 @@ class Layout extends Component {
 
         this.getData();
     }
-
+    // wyswietlanie
     getData(){
         axios.get(`http://156.17.41.242:8085/RestApi/resources/clips/rules`)
         .then(res => {
 
             if(res.data != null){
                 const results= res.data.rule.map(row => ({
-                    //key: this.state.idx++, 
+                    key: this.state.idx++, 
                     employee: row.name,
-                    key: row.word,
+                    word: row.word,
                     predicament: row.predicament,
                     certainty: row.certainty
                   }))
@@ -80,37 +78,45 @@ class Layout extends Component {
             
         })
     }
+    // dodawanie
+    onAddRow(row) {
 
-    onAfterInsertRow(row) {
-        
-        //row["id"] = this.state.idx++;
+        //if(row["employee"]!=="" && row["word"]!=="" && row["certainty"]!==""){
+            const rule = {
+                name: row["employee"],
+                word: row["word"],
+                predicament: "default",
+                certainty: row["certainty"]
+            }
     
-        const rule = {
-            name: row["employee"],
-            word: row["key"],
-            predicament: "default",
-            certainty: row["certainty"]
-        }
+            console.log(rule);
+    
+            axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
+            .then(res => {
+            })
+    
+           //window.location.reload();
+        //}
+      }
 
-        axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/post`, rule)
-        .then(res => {
-        })
-    }
-
+    // usuwanie 
     onClickRowSelected(cell, row, rowIndex){
         console.log(row);
 
         const rule = {
+            certainty: row["certainty"],
             name: row["employee"],
-            word: row["key"],
-            predicament: row["predicament"],
-            certainty: row["certainty"]
+            word: row["word"],
+            predicament: row["predicament"]
         }
+
+        console.log(rule);
         axios.post(`http://156.17.41.242:8085/RestApi/resources/clips/delete`, rule)
         .then(res => {
+            console.log(res);
         })
 
-        window.location.reload();
+      // window.location.reload();
     }
 
     cellButton(cell, row, enumObject, rowIndex) {
@@ -118,11 +124,11 @@ class Layout extends Component {
             <Button variant="danger" onClick={() => this.onClickRowSelected(cell, row, rowIndex)}>Delete</Button>
         )
      }
-
+     
     render (){
 
         const options = {
-            afterInsertRow: this.onAfterInsertRow   // A hook for after insert rows
+            onAddRow: this.onAddRow 
         };
 
         return (
@@ -140,9 +146,9 @@ class Layout extends Component {
                 striped
                 hover
                 condensed >
-                {/* <TableHeaderColumn dataField="key" isKey dataAlign="center" dataSort editable={ false }>Id</TableHeaderColumn> */}
+                <TableHeaderColumn dataField="key" isKey dataAlign="center" dataSort editable={ false }>Id</TableHeaderColumn>
                 <TableHeaderColumn dataField="employee" dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Employee</TableHeaderColumn>
-                <TableHeaderColumn dataField="key"  isKey dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Word</TableHeaderColumn>
+                <TableHeaderColumn dataField="word" dataAlign="center" dataSort filter={ { type: 'TextFilter' } }>Word</TableHeaderColumn>
                 <TableHeaderColumn dataField="certainty" dataAlign="center" dataSort filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>','<', '<=', '>=' ] } }>Certainty</TableHeaderColumn>
                 <TableHeaderColumn dataField='button' dataAlign="center" editable={ false } width={'10%'} dataFormat={this.cellButton.bind(this)}/>
             </BootstrapTable>
