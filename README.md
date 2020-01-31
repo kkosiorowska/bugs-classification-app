@@ -1,8 +1,8 @@
-bugs-classification-app
+# Bugs Classification App
 
-## Creat build folder
-- npm run build
+## Description
 
-## Added homepage to package.json
+### Application View 
 
-- "homepage" : "http://156.17.41.242:8088/bugs-classification-app/build/"
+<img src="https://github.com/kkosiorowska/bugs-classification-app/blob/master/src/images/main-view.png">
+

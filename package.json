@@ -1,6 +1,6 @@
 {
   "name": "bugs-classification-app",
-  "homepage" : "http://156.17.41.242:8088/bugs-classification-app/build/",
+  "homepage": "http://156.17.41.242:8088/bugs-classification-app/build/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
